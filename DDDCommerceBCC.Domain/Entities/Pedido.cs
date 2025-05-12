@@ -1,4 +1,6 @@
-﻿namespace DDDCommerceBCC.Domain.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace DDDCommerceBCC.Domain.Entities
 {
     public class Pedido
     {

@@ -12,9 +12,15 @@ namespace DDDCommerceBCC.Infra
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Despacho>()
+                .HasOne<Pedido>()
+                .WithOne()
+                .HasForeignKey<Despacho>(d => d.PedidoId);
 
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<Despacho> Despachos { get; set; }
     }
 }

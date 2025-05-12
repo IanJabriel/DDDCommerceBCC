@@ -4,6 +4,7 @@ using DDDCommerceBCC.Infra;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DDDCommerceBCC.Infra.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SqlContextModelSnapshot : ModelSnapshot
+    [Migration("20250511163323_despacho")]
+    partial class despacho
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,27 +25,7 @@ namespace DDDCommerceBCC.Infra.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DDDCommerceBCC.Domain.Entities.Pedido", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Data")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LojaOrigem")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Pedidos");
-                });
-
-            modelBuilder.Entity("Despacho", b =>
+            modelBuilder.Entity("DDDCommerceBCC.Domain.Entities.Despacho", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -72,12 +55,40 @@ namespace DDDCommerceBCC.Infra.Migrations
                     b.ToTable("Despachos");
                 });
 
-            modelBuilder.Entity("Despacho", b =>
+            modelBuilder.Entity("DDDCommerceBCC.Domain.Entities.Pedido", b =>
                 {
-                    b.HasOne("DDDCommerceBCC.Domain.Entities.Pedido", null)
-                        .WithOne()
-                        .HasForeignKey("Despacho", "PedidoId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LojaOrigem")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Pedidos");
+                });
+
+            modelBuilder.Entity("DDDCommerceBCC.Domain.Entities.Despacho", b =>
+                {
+                    b.HasOne("DDDCommerceBCC.Domain.Entities.Pedido", "Pedido")
+                        .WithOne("Despacho")
+                        .HasForeignKey("DDDCommerceBCC.Domain.Entities.Despacho", "PedidoId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pedido");
+                });
+
+            modelBuilder.Entity("DDDCommerceBCC.Domain.Entities.Pedido", b =>
+                {
+                    b.Navigation("Despacho")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
